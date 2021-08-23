@@ -1,0 +1,190 @@
+{
+    "policyRule": {
+        "if": {
+            "allOf": [
+                {
+                    "field": "type",
+                    "equals": "Microsoft.Compute/virtualMachines"
+                },
+                {
+                    "field": "identity.type",
+                    "contains": "SystemAssigned"
+                },
+                {
+                    "anyOf": [
+                        {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Compute/virtualMachines/storageProfile.imageReference.publisher",
+                                    "equals": "MicrosoftWindowsServer"
+                                },
+                                {
+                                    "field": "Microsoft.Compute/virtualMachines/storageProfile.imageReference.offer",
+                                    "equals": "WindowsServer"
+                                },
+                                {
+                                    "field": "Microsoft.Compute/virtualMachines/storageProfile.imageReference.sku",
+                                    "in": [
+                                        "2019-Datacenter",
+                                        "2019-Datacenter-Core",
+                                        "2019-datacenter-core-g2",
+                                        "2019-Datacenter-Core-smalldisk",
+                                        "2019-datacenter-core-smalldisk-g2",
+                                        "2019-Datacenter-Core-with-Containers",
+                                        "2019-datacenter-core-with-containers-g2",
+                                        "2019-Datacenter-Core-with-Containers-smalldisk",
+                                        "2019-datacenter-core-with-containers-smalldisk-g2",
+                                        "2019-datacenter-gensecond",
+                                        "2019-datacenter-gs",
+                                        "2019-Datacenter-smalldisk",
+                                        "2019-datacenter-smalldisk-g2",
+                                        "2019-Datacenter-with-Containers",
+                                        "2019-datacenter-with-containers-g2",
+                                        "2019-datacenter-with-containers-gs",
+                                        "2019-Datacenter-with-Containers-smalldisk",
+                                        "2019-datacenter-with-containers-smalldisk-g2",
+                                        "2019-Datacenter-zhcn",
+                                        "2019-datacenter-zhcn-g2"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Compute/virtualMachines/storageProfile.imageReference.publisher",
+                                    "equals": "MicrosoftWindowsDesktop"
+                                },
+                                {
+                                    "field": "Microsoft.Compute/virtualMachines/storageProfile.imageReference.offer",
+                                    "equals": "windows-10"
+                                },
+                                {
+                                    "field": "Microsoft.Compute/virtualMachines/storageProfile.imageReference.sku",
+                                    "in": [
+                                        "19h2-ent",
+                                        "19h2-ent-g2",
+                                        "19h2-entn",
+                                        "19h2-entn-g2",
+                                        "19h2-evd",
+                                        "19h2-evd-g2",
+                                        "19h2-pro",
+                                        "19h2-pro-g2",
+                                        "19h2-pro-zh-cn",
+                                        "19h2-pro-zh-cn-g2",
+                                        "19h2-pron",
+                                        "19h2-pron-g2",
+                                        "20h1-ent",
+                                        "20h1-ent-g2",
+                                        "20h1-entn",
+                                        "20h1-entn-g2",
+                                        "20h1-evd",
+                                        "20h1-evd-g2",
+                                        "20h1-pro",
+                                        "20h1-pro-g2",
+                                        "20h1-pro-zh-cn",
+                                        "20h1-pro-zh-cn-g2",
+                                        "20h1-pron",
+                                        "20h1-pron-g2",
+                                        "20h2-ent",
+                                        "20h2-ent-g2",
+                                        "20h2-entn",
+                                        "20h2-entn-g2",
+                                        "20h2-evd",
+                                        "20h2-evd-g2",
+                                        "20h2-pro",
+                                        "20h2-pro-g2",
+                                        "20h2-pro-zh-cn",
+                                        "20h2-pro-zh-cn-g2",
+                                        "20h2-pron",
+                                        "20h2-pron-g2",
+                                        "rs5-enterprise",
+                                        "rs5-enterprise-g2",
+                                        "rs5-enterprise-standard",
+                                        "rs5-enterprise-standard-g2",
+                                        "rs5-enterprisen",
+                                        "rs5-enterprisen-g2",
+                                        "rs5-enterprisen-standard",
+                                        "rs5-enterprisen-standard-g2",
+                                        "rs5-evd",
+                                        "rs5-evd-g2",
+                                        "rs5-pro",
+                                        "rs5-pro-g2",
+                                        "rs5-pro-zh-cn",
+                                        "rs5-pro-zh-cn-g2",
+                                        "rs5-pron",
+                                        " rs5-pron-g2"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "then": {
+            "effect": "deployIfNotExists",
+            "details": {
+                "roleDefinitionIds": [
+                    "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                ],
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "existenceCondition": {
+                    "allOf": [
+                        {
+                            "field": "Microsoft.Compute/virtualMachines/extensions/publisher",
+                            "equals": "Microsoft.Azure.ActiveDirectory"
+                        },
+                        {
+                            "field": "Microsoft.Compute/virtualMachines/extensions/type",
+                            "equals": "AADLoginForWindows"
+                        },
+                        {
+                            "field": "Microsoft.Compute/virtualMachines/extensions/provisioningState",
+                            "equals": "Succeeded"
+                        }
+                    ]
+                },
+                "deployment": {
+                    "properties": {
+                        "mode": "incremental",
+                        "parameters": {
+                            "vmName": {
+                                "value": "[field('name')]"
+                            },
+                            "location": {
+                                "value": "[field('location')]"
+                            }
+                        },
+                        "template": {
+                            "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                            "contentVersion": "1.0.0.0",
+                            "parameters": {
+                                "vmName": {
+                                    "type": "string"
+                                },
+                                "location": {
+                                    "type": "string"
+                                }
+                            },
+                            "resources": [
+                                {
+                                    "apiVersion": "2020-06-01",
+                                    "name": "[concat(parameters('vmName'), '/AAD')]",
+                                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                                    "location": "[parameters('location')]",
+                                    "properties": {
+                                        "publisher": "Microsoft.Azure.ActiveDirectory",
+                                        "type": "AADLoginForWindows",
+                                        "typeHandlerVersion": "1.0",
+                                        "autoUpgradeMinorVersion": true
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
